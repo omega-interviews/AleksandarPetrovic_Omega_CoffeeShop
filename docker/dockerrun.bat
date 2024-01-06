@@ -1,0 +1,1 @@
+docker run -p 8080:8080 -p 9990:9990 -e WILDFLY_PASSWORD=wildfly1 --name coffee_shop_server bitnami/wildfly:23.0.2

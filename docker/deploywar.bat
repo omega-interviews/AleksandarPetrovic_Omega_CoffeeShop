@@ -1,0 +1,1 @@
+docker cp ..\target\coffee-shop.war coffee_shop_server:/opt/bitnami/wildfly/standalone/deployments
