@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	template="/WEB-INF/templates/default.xhtml"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<ui:define name="content">
+		<h1>Coffee shop</h1>
+
+		<h:form id="mainForm">
+			<h1>
+				Table number: #{indexView.tableNumber != null ?
+				indexView.tableNumber : 'PLEASE CHOOSE TABLE'}
+				<p:commandButton icon="pi pi-file-edit"
+					oncomplete="PF('tableNumberDialog').show();" />
+			</h1>
+
+			<p:dataGrid id="coffeeTypesGridId" var="ct"
+				value="#{adminView.coffeeTypes}" layout="grid">
+				<div class="grid-item" style="margin-bottom: 0">
+					<div class="grid-item-image">
+						<img src="#{ct.servletImagePath}" />
+					</div>
+					<div class="grid-item-name">
+						<h:outputLabel value="#{ct.name}" />
+					</div>
+					<div class="grid-item-button">
+						<p:commandButton value="#{ct.price}e"
+							action="#{indexView.placeOrder(ct)}" />
+					</div>
+				</div>
+			</p:dataGrid>
+
+			<p:commandButton title="Refresh" icon="pi pi-refresh"
+				action="#{indexView.updateCurrentOrders()}" update="currentOrdersId" />
+			<h:panelGrid id="currentOrdersId" columns="3">
+				<h:outputText value="Machine no.#{indexView.machine1.id}" />
+				<h:outputText value="Machine no.#{indexView.machine2.id}" />
+				<h:outputText value="Machine no.#{indexView.machine3.id}" />
+				<h:outputText
+					value="#{indexView.isMachineFree(1) ? 'SLOBODAN' : 'ZAUZET'}"
+					style="#{indexView.isMachineFree(1) ? 'color:darkgreen' : 'color:red'}" />
+				<h:outputText
+					value="#{indexView.isMachineFree(2) ? 'SLOBODAN' : 'ZAUZET'}"
+					style="#{indexView.isMachineFree(2) ? 'color:darkgreen' : 'color:red'}" />
+				<h:outputText
+					value="#{indexView.isMachineFree(3) ? 'SLOBODAN' : 'ZAUZET'}"
+					style="#{indexView.isMachineFree(3) ? 'color:darkgreen' : 'color:red'}" />
+				<h:outputText value="#{indexView.mach1orders.size()}" />
+				<h:outputText value="#{indexView.mach2orders.size()}" />
+				<h:outputText value="#{indexView.mach3orders.size()}" />
+				<h:panelGroup>
+					<ul>
+						<c:forEach items="#{indexView.mach1orders}" var="order">
+							<li><h:outputText value="#{order.time}">
+									<f:convertDateTime type="localDateTime" pattern="HH:mm:ss" />
+								</h:outputText></li>
+						</c:forEach>
+					</ul>
+				</h:panelGroup>
+				<h:panelGroup>
+					<ul>
+						<c:forEach items="#{indexView.mach2orders}" var="order">
+							<li><h:outputText value="#{order.time}">
+									<f:convertDateTime type="localDateTime" pattern="HH:mm:ss" />
+								</h:outputText></li>
+						</c:forEach>
+					</ul>
+				</h:panelGroup>
+				<h:panelGroup>
+					<ul>
+						<c:forEach items="#{indexView.mach3orders}" var="order">
+							<li><h:outputText value="#{order.time}">
+									<f:convertDateTime type="localDateTime" pattern="HH:mm:ss" />
+								</h:outputText></li>
+						</c:forEach>
+					</ul>
+				</h:panelGroup>
+			</h:panelGrid>
+
+			<p:dialog id="tableNumberDialogId" header="Choose table number"
+				width="30%" widgetVar="tableNumberDialog" modal="true">
+				<p:panelGrid columns="2">
+					<h:outputLabel for="chTableNumId" value="Table number:" />
+					<p:inputNumber id="chTableNumId" value="#{indexView.chTableNumber}" minValue="1" />
+					<h:outputLabel for="tableNumChangePwId" value="Password:" />
+					<p:inputText id="tableNumChangePwId"
+						value="#{indexView.tableNumChangePw}" />
+					<br />
+					<p:commandButton value="Confirm" icon="pi pi-check-circle"
+						actionListener="#{indexView.changeTableNumber()}" />
+					<br />
+				</p:panelGrid>
+			</p:dialog>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
