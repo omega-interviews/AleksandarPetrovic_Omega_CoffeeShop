@@ -22,7 +22,7 @@ http://localhost:8080/coffee-shop/rest/admin/coffeeTypes/active gets all active 
 
 http://localhost:8080/coffee-shop/rest/backend/currentOrders gets all currently active orders.
 
-place order?
+Place an order example http://localhost:8080/coffee-shop/rest/backend/placeAnOrder?coffeeTypeId=1&tableNumber=1
 
 Bartender ordering
 ------------------
