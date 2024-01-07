@@ -1,5 +1,7 @@
 package me.ap.coffeeshop.model;
 
+import java.nio.file.FileSystem;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -20,7 +22,7 @@ public class CoffeeType {
 	private String imagePath;
 
 	public String getServletImagePath() {
-		int start = imagePath.lastIndexOf("\\");
+		int start = imagePath.lastIndexOf("/");
 		if (start < 0)
 			return "";
 		else {
