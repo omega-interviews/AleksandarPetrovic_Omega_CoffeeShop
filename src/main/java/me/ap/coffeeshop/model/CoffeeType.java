@@ -1,7 +1,5 @@
 package me.ap.coffeeshop.model;
 
-import java.nio.file.FileSystem;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
