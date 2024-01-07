@@ -49,7 +49,7 @@ The other UI page is http://localhost:8080/coffee-shop/admin.xhtml It enables ad
 Postman test collection
 -----------------------
 
-There is a folder 'Postman' which contains a collection of tests.
+There is a postman collection with all the endpoint examples.
 
  
 Additional info
