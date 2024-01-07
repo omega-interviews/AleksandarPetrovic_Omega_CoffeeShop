@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h1>Coffee shop</h1>
+
+		<h:form id="mainForm">
+			<h2>Administrating coffee types</h2>
+			<p:commandButton value="Add new coffee type" icon="pi pi-plus"
+				oncomplete="PF('coffeeTypeDialog').show();" />
+			<p:dataTable id="coffeeTypesTableId" var="ct"
+				value="#{adminView.coffeeTypes}">
+				<p:column headerText="Id" width="5%">
+					<h:outputText value="#{ct.id}" />
+				</p:column>
+
+				<p:column headerText="Name" width="">
+					<h:outputText value="#{ct.name}" />
+				</p:column>
+
+				<p:column headerText="Coffee amount" width="5%">
+					<h:outputText value="#{ct.coffeeAmount}" />
+				</p:column>
+
+				<p:column headerText="Preparation time" width="5%">
+					<h:outputText value="#{ct.preparationTime}" />
+				</p:column>
+
+				<p:column headerText="Price" width="5%">
+					<h:outputText value="#{ct.price}" />
+				</p:column>
+
+				<p:column headerText="Image">
+					<h:outputText value="#{ct.imagePath}" />
+				</p:column>
+
+				<p:column headerText="Actions">
+					<p:commandButton title="Edit" icon="pi pi-file-edit"
+						actionListener="#{adminView.loadCoffeType(ct)}"
+						oncomplete="PF('coffeeTypeDialog').show();"
+						update="mainForm:coffeeTypeDialogId" />
+					<p:commandButton title="Delete"
+						action="#{adminView.deleteCoffeeType(ct)}" icon="pi pi-trash">
+						<p:confirm header="Confirmation"
+							update="mainForm:coffeeTypesTableId"
+							message="Are you sure you want to delete this record?"
+							icon="pi pi-info-circle" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+			<p:dialog id="coffeeTypeDialogId" header="Add or edit coffee type"
+				height="100%" width="40%" widgetVar="coffeeTypeDialog" modal="true">
+
+				<p:panelGrid columns="2">
+					<h:outputLabel for="coffeTypeId" value="Id:" />
+					<p:inputText id="coffeTypeId" value="#{adminView.coffeeType.id}"
+						disabled="true" />
+
+					<p:outputLabel for="CoffeeNameId" value="Name:" />
+					<p:inputText id="CoffeeNameId" value="#{adminView.coffeeType.name}" />
+
+					<p:outputLabel for="CoffeeAmountId" value="Coffee amount:" />
+					<p:inputText id="CoffeeAmountId"
+						value="#{adminView.coffeeType.coffeeAmount}" />
+
+					<p:outputLabel for="CoffeePrepTimeId" value="Preparation time:" />
+					<p:inputText id="CoffeePrepTimeId"
+						value="#{adminView.coffeeType.preparationTime}" />
+
+					<h:outputLabel for="CoffeeTypeNameId" value="Price:" />
+					<p:inputText id="CoffeeTypeNameId"
+						value="#{adminView.coffeeType.price}" />
+				</p:panelGrid>
+
+				<p:fileUpload mode="advanced" multiple="false" sizeLimit="102400"
+					allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+					invalidSizeMessage="Maximum file size allowed is 100 KB"
+					invalidFileMessage="only gif | jpg | jpeg | png is allowed"
+					update="messages" listener="#{adminView.handleFileUpload}" />
+
+				<p:panelGrid columns="2">
+					<br />
+					<p:commandButton value="Confirm" icon="pi pi-check-circle"
+						action="#{adminView.saveCoffeeType()}"
+						update="mainForm:coffeeTypesTableId messages"
+						oncomplete="PF('coffeeTypeDialog').hide();" />
+				</p:panelGrid>
+
+
+			</p:dialog>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+				responsive="true" width="350">
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no ui-button-flat" />
+				<p:commandButton value="Yes" type="button"
+					styleClass="ui-confirmdialog-yes" />
+			</p:confirmDialog>
+
+			<p:growl id="messages" showDetail="true" />
+		</h:form>
+
+	</ui:define>
+</ui:composition>

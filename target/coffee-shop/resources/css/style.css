@@ -1,0 +1,36 @@
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #F1F1F1;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size: 0.8em;
+	color: #363636;
+}
+
+#container {
+	margin: 0 auto;
+	padding: 0 20px 10px 20px;
+	border-top: 5px solid #000000;
+	border-left: 5px solid #8c8f91;
+	border-right: 5px solid #8c8f91;
+	border-bottom: 25px solid #8c8f91;
+	width: 90%;
+	background: #FFFFFF;
+	background-image:
+		url(#{request.contextPath}/resources/gfx/headerbkg.png);
+	background-repeat: repeat-x;
+	padding-top: 30px;
+	box-shadow: 3px 3px 15px #d5d5d5;
+}
+
+.dualbrand {
+	float: right;
+	padding-right: 10px;
+}
+
+#footer {
+	clear: both;
+	text-align: center;
+	color: #666666;
+	font-size: 0.85em;
+}
