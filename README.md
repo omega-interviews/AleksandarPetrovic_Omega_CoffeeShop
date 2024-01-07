@@ -11,7 +11,7 @@ If the server started correctly, run deploywar.bat script. This will deploy the 
 Index page
 ----------
 
-The application has two UI pages. http://localhost:8080/coffee-shop/index.xhtml is the table ordering page. You can select a table, and make an order on this page. It also shows information about current orders.
+The application has two UI pages. http://localhost:8080/coffee-shop/index.xhtml is the table ordering page. You can select a table(Password is 'password123'), and make an order on this page. It also shows information about current orders.
 
 Backend bean
 ------------
