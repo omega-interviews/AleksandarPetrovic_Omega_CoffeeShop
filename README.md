@@ -4,9 +4,9 @@ Coffee shop
 How to deploy?
 --------------
 
-In the 'Docker' folder, run dockerrun.bat script. This will build a container with a Jboss WildFly server.
+In the 'Docker' folder, run dockerrun.bat(or .sh for Mac/Linux) script. This will build a container with a Jboss WildFly server.
 
-If the server started correctly, run deploywar.bat script. This will deploy the coffee-shop application, and copy some images to the container.
+If the server started correctly, run deploywar.bat(or .sh for Mac/Linux) script. This will deploy the coffee-shop application, and copy some images to the container.
 
 Index page
 ----------
