@@ -11,6 +11,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.hashids.Hashids;
 import org.jboss.logging.Logger;
 import org.omnifaces.cdi.Param;
 
@@ -42,7 +43,9 @@ public class IndexView implements Serializable {
 
 	@Inject
 	@Param(name = "tableNum")
-	private Integer tableNum;
+	private String tableNum;
+
+	private Hashids hashids = new Hashids("<0ffeesh0p");
 
 	private Machine machine1;
 	private Machine machine2;
@@ -54,7 +57,7 @@ public class IndexView implements Serializable {
 	private List<CoffeeOrder> tableOrders = new ArrayList<>();
 	private Double tableOrdersTotal;
 
-	private Integer tableNumber;
+	private Long tableNumber;
 	private Integer chTableNumber;
 	private String tableNumChangePw;
 
@@ -70,9 +73,11 @@ public class IndexView implements Serializable {
 		logger.info("Loaded coffee types: " + coffeeTypes.size());
 		updateCurrentOrders();
 		logger.info("Index page loaded with table number: " + tableNum);
-		tableNumber = tableNum;
-		if (tableNumber != null)
-			updateCurrentOrdersForTable();
+		if (tableNum != null) {
+			tableNumber = hashids.decode(tableNum)[0];
+			if (tableNumber != null)
+				updateCurrentOrdersForTable();
+		}
 
 	}
 
@@ -85,7 +90,7 @@ public class IndexView implements Serializable {
 
 		CoffeeOrder order = new CoffeeOrder();
 		order.setCoffeeType(ct);
-		order.setTableNumber(tableNumber);
+		order.setTableNumber(tableNumber.intValue());
 		Long orderNumber = ordersService.determineMachine(order);
 
 		if (orderNumber == null) {
@@ -101,7 +106,7 @@ public class IndexView implements Serializable {
 	public void changeTableNumber() throws IOException {
 		if (tableNumChangePw.equals("password123")) {
 			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect("/coffee-shop/index.xhtml?tableNum=" + chTableNumber);
+					.redirect("/coffee-shop/index.xhtml?tableNum=" + hashids.encode(chTableNumber));
 		}
 	}
 
@@ -127,7 +132,7 @@ public class IndexView implements Serializable {
 	}
 
 	public void updateCurrentOrdersForTable() {
-		tableOrders = dBService.getCurrentCoffeeOrdersForTable(tableNumber);
+		tableOrders = dBService.getCurrentCoffeeOrdersForTable(tableNumber.intValue());
 		tableOrdersTotal = 0.0;
 		for (CoffeeOrder o : tableOrders)
 			tableOrdersTotal += o.getCoffeeType().getPrice();
@@ -155,14 +160,6 @@ public class IndexView implements Serializable {
 
 	public void setMachine3(Machine machine3) {
 		this.machine3 = machine3;
-	}
-
-	public Integer getTableNumber() {
-		return tableNumber;
-	}
-
-	public void setTableNumber(Integer tableNumber) {
-		this.tableNumber = tableNumber;
 	}
 
 	public String getTableNumChangePw() {
@@ -227,6 +224,23 @@ public class IndexView implements Serializable {
 
 	public void setTableOrdersTotal(Double tableOrdersTotal) {
 		this.tableOrdersTotal = tableOrdersTotal;
+	}
+
+	public Long getTableNumber() {
+		return tableNumber;
+	}
+
+	public void setTableNumber(Long tableNumber) {
+		this.tableNumber = tableNumber;
+	}
+
+	public static void main(String[] args) {
+		Hashids hashids = new Hashids("<0ffeesh0p");
+		long l = 1;
+		String encoded = hashids.encode(l);
+		System.out.println(encoded);
+		long[] x = hashids.decode(encoded);
+		System.out.println(x[0]);
 	}
 
 }
