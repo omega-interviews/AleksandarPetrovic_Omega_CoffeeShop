@@ -20,7 +20,7 @@ public class OrdersService {
 	@Inject
 	private DBService dBService;
 
-	public boolean determineMachine(CoffeeOrder order) {
+	public Long determineMachine(CoffeeOrder order) {
 		
 		checkIfRefillsNeeded(order.getCoffeeType());
 
@@ -83,17 +83,17 @@ public class OrdersService {
 		}
 	}
 
-	private boolean placeOrderToMachine(CoffeeOrder o, Machine m, LocalDateTime t) {
+	private Long placeOrderToMachine(CoffeeOrder o, Machine m, LocalDateTime t) {
 		Refill latestRefillForMach = dBService.getLatestRefillForMachine(m);
 		if (latestRefillForMach != null && isRefillInTheFuture(latestRefillForMach))
-			return false;
+			return null;
 		o.setMachine(m);
 		if (t != null)
 			o.setTime(t);
 		else
 			o.setTime(LocalDateTime.now());
-		dBService.saveOrder(o);
-		return true;
+		CoffeeOrder result = dBService.saveOrder(o);
+		return result.getId();
 	}
 
 	public boolean isRefillInTheFuture(Refill refill) {
