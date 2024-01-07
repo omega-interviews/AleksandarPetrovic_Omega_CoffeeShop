@@ -51,10 +51,10 @@ public class OrderRestService {
 		CoffeeOrder order = new CoffeeOrder();
 		order.setCoffeeType(ct);
 		order.setTableNumber(0);
-		boolean success = ordersService.determineMachine(order);
+		Long result = ordersService.determineMachine(order);
 
-		if (success)
-			builder = Response.ok();
+		if (result != null)
+			builder = Response.ok(result);
 		else
 			builder = Response.accepted("The request went wrong. Please try again!");
 
