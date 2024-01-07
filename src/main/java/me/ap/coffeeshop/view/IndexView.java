@@ -72,9 +72,10 @@ public class IndexView implements Serializable {
 		coffeeTypes = dBService.getAllActiveCoffeeTypes();
 		logger.info("Loaded coffee types: " + coffeeTypes.size());
 		updateCurrentOrders();
-		logger.info("Index page loaded with table number: " + tableNum);
+		logger.info("Index page loaded with table number param: " + tableNum);
 		if (tableNum != null) {
 			tableNumber = hashids.decode(tableNum)[0];
+			logger.info("After decoding: " + tableNumber);
 			if (tableNumber != null)
 				updateCurrentOrdersForTable();
 		}
