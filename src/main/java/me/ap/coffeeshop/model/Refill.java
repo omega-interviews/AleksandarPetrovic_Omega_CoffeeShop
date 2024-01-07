@@ -15,6 +15,7 @@ public class Refill {
 	private long id;
 	
 	private LocalDateTime time;
+	private LocalDateTime finishTime;
 	
 	@ManyToOne
 	private Machine machine;
@@ -43,9 +44,17 @@ public class Refill {
 		this.time = time;
 	}
 
+	public LocalDateTime getFinishTime() {
+		return finishTime;
+	}
+
+	public void setFinishTime(LocalDateTime finishTime) {
+		this.finishTime = finishTime;
+	}
+
 	@Override
 	public String toString() {
-		return "Refill [id=" + id + ", time=" + time + ", machine=" + machine + "]";
+		return "Refill [id=" + id + ", time=" + time + ", finishTime=" + finishTime + ", machine=" + machine + "]";
 	}
 	
 }

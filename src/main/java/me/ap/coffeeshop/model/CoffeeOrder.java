@@ -15,6 +15,7 @@ public class CoffeeOrder {
 	private long id;
 
 	private LocalDateTime time;
+	private LocalDateTime finishTime;
 
 	@ManyToOne
 	private CoffeeType coffeeType;
@@ -23,13 +24,6 @@ public class CoffeeOrder {
 	private Machine machine;
 
 	private int tableNumber;
-
-	public LocalDateTime getFinishTime() {
-		if (time != null && coffeeType != null) {
-			return time.plusSeconds(coffeeType.getPreparationTime());
-		} else
-			return time;
-	}
 
 	public long getId() {
 		return id;
@@ -71,10 +65,18 @@ public class CoffeeOrder {
 		this.tableNumber = tableNumber;
 	}
 
+	public LocalDateTime getFinishTime() {
+		return finishTime;
+	}
+
+	public void setFinishTime(LocalDateTime finishTime) {
+		this.finishTime = finishTime;
+	}
+
 	@Override
 	public String toString() {
-		return "CoffeeOrder [id=" + id + ", time=" + time + ", coffeeType=" + coffeeType + ", machine=" + machine
-				+ ", tableNumber=" + tableNumber + "]";
+		return "CoffeeOrder [id=" + id + ", time=" + time + ", finishTime=" + finishTime + ", coffeeType=" + coffeeType
+				+ ", machine=" + machine + ", tableNumber=" + tableNumber + "]";
 	}
 
 }

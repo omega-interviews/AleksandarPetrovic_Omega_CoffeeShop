@@ -45,12 +45,11 @@ public class DBService {
 						CoffeeOrder.class)
 				.setParameter("mach", mach).getResultList();
 		if (result.size() > 0) {
-			logger.info("Latest order for machine " + mach.getId() + ": " + result.get(0));
 			return result.get(0);
 		} else
 			return null;
 	}
-	
+
 	public List<CoffeeType> getAllActiveCoffeeTypes() {
 		return em.createQuery("select c from CoffeeType c where c.deleted = false", CoffeeType.class).getResultList();
 	}
@@ -71,59 +70,39 @@ public class DBService {
 			totalAmount += coffeeOrder.getCoffeeType().getCoffeeAmount();
 		}
 		return totalAmount;
-//		if (refill != null)
-//			return em.createQuery(
-//					"select sum(o.coffeeType.coffeeAmount) from CoffeeOrder o where o.machine = :mach and o.time > :t",
-//					Long.class).setParameter("mach", refill.getMachine()).setParameter("t", refill.getTime())
-//					.getSingleResult();
-//		else
-//			return em.createQuery("select sum(o.coffeeType.coffeeAmount) from CoffeeOrder o where o.machine = :mach",
-//					Long.class).setParameter("mach", machine).getSingleResult();
 	}
 
 	public List<CoffeeOrder> getCurrentCoffeeToGoOrders() {
-		int longestPrepTime = em
-				.createQuery("select max(ct.preparationTime) from CoffeeType ct where ct.deleted = false",
-						Integer.class)
-				.getSingleResult();
 		LocalDateTime t = LocalDateTime.now();
-		t = t.minusSeconds(longestPrepTime);
 		List<CoffeeOrder> result = em
-				.createQuery("select o from CoffeeOrder o where o.machine is null and o.time > :t", CoffeeOrder.class)
+				.createQuery("select o from CoffeeOrder o where o.machine is null and o.finishTime > :t",
+						CoffeeOrder.class)
 				.setParameter("t", t).getResultList();
 		return result;
 	}
 
 	public List<CoffeeOrder> getCurrentCoffeeOrdersForMachine(Machine mach) {
-		int longestPrepTime = em
-				.createQuery("select max(ct.preparationTime) from CoffeeType ct where ct.deleted = false",
-						Integer.class)
-				.getSingleResult();
 		LocalDateTime t = LocalDateTime.now();
-		t = t.minusSeconds(longestPrepTime);
 		List<CoffeeOrder> result = em
-				.createQuery("select o from CoffeeOrder o where o.machine = :mach and o.time > :t", CoffeeOrder.class)
+				.createQuery("select o from CoffeeOrder o where o.machine = :mach and o.finishTime > :t",
+						CoffeeOrder.class)
 				.setParameter("mach", mach).setParameter("t", t).getResultList();
 		return result;
 	}
-	
+
 	public List<CoffeeOrder> getCurrentCoffeeOrdersForTable(int tableNumber) {
-		int longestPrepTime = em
-				.createQuery("select max(ct.preparationTime) from CoffeeType ct where ct.deleted = false",
-						Integer.class)
-				.getSingleResult();
 		LocalDateTime t = LocalDateTime.now();
-		t = t.minusSeconds(longestPrepTime);
 		List<CoffeeOrder> result = em
-				.createQuery("select o from CoffeeOrder o where o.tableNumber = :tableNumber and o.time > :t", CoffeeOrder.class)
+				.createQuery("select o from CoffeeOrder o where o.tableNumber = :tableNumber and o.finishTime > :t",
+						CoffeeOrder.class)
 				.setParameter("tableNumber", tableNumber).setParameter("t", t).getResultList();
 		return result;
 	}
 
 	public CoffeeType getCoffeeTypeById(long id) {
 		try {
-			return em.createQuery("select ct from CoffeeType ct where ct.id = :id and ct.deleted = false", CoffeeType.class)
-					.setParameter("id", id).getSingleResult();
+			return em.createQuery("select ct from CoffeeType ct where ct.id = :id and ct.deleted = false",
+					CoffeeType.class).setParameter("id", id).getSingleResult();
 		} catch (NoResultException nre) {
 			return null;
 		}
