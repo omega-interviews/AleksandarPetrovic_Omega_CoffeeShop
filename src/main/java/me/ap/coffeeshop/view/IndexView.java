@@ -52,6 +52,7 @@ public class IndexView implements Serializable {
 	private List<CoffeeOrder> mach2orders;
 	private List<CoffeeOrder> mach3orders;
 	private List<CoffeeOrder> tableOrders = new ArrayList<>();
+	private Double tableOrdersTotal;
 
 	private Integer tableNumber;
 	private Integer chTableNumber;
@@ -124,9 +125,12 @@ public class IndexView implements Serializable {
 		mach2orders = dBService.getCurrentCoffeeOrdersForMachine(machine2);
 		mach3orders = dBService.getCurrentCoffeeOrdersForMachine(machine3);
 	}
-	
+
 	public void updateCurrentOrdersForTable() {
 		tableOrders = dBService.getCurrentCoffeeOrdersForTable(tableNumber);
+		tableOrdersTotal = 0.0;
+		for (CoffeeOrder o : tableOrders)
+			tableOrdersTotal += o.getCoffeeType().getPrice();
 	}
 
 	public Machine getMachine1() {
@@ -215,6 +219,14 @@ public class IndexView implements Serializable {
 
 	public void setTableOrders(List<CoffeeOrder> tableOrders) {
 		this.tableOrders = tableOrders;
+	}
+
+	public Double getTableOrdersTotal() {
+		return tableOrdersTotal;
+	}
+
+	public void setTableOrdersTotal(Double tableOrdersTotal) {
+		this.tableOrdersTotal = tableOrdersTotal;
 	}
 
 }

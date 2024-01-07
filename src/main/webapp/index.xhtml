@@ -18,23 +18,28 @@
 			</h1>
 
 			<p:dataTable id="currentOrdersForTableId" var="order"
-				value="#{indexView.tableOrders}">
+				value="#{indexView.tableOrders}" emptyMessage="No active orders."
+				style="padding-bottom: 15px">
 				<f:facet name="header">
            			 Active orders for this table
            			 <p:commandButton title="Refresh" icon="pi pi-refresh"
 						action="#{indexView.updateCurrentOrdersForTable()}"
 						update="currentOrdersForTableId" />
 				</f:facet>
-				<p:column headerText="Order number">
+				<p:column headerText="Order number" sortBy="#{order.id}">
 					<h:outputText value="#{order.id}" />
 				</p:column>
-				<p:column headerText="Coffee">
+				<p:column headerText="Coffee" sortBy="#{order.coffeeType.name}">
 					<h:outputText value="#{order.coffeeType.name}" />
 				</p:column>
-				<p:column headerText="Time">
+				<p:column headerText="Time" sortBy="#{order.finishTime}">
 					<h:outputText value="#{order.finishTime}">
 						<f:convertDateTime type="localDateTime" pattern="HH:mm:ss" />
 					</h:outputText>
+				</p:column>
+				<p:column headerText="Price" sortBy="#{order.coffeeType.price}"
+					footerText="Total price: #{indexView.tableOrdersTotal} €">
+					<h:outputText value="#{order.coffeeType.price} €" />
 				</p:column>
 			</p:dataTable>
 
