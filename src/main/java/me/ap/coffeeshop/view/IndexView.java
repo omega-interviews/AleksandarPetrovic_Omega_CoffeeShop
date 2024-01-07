@@ -19,6 +19,7 @@ import me.ap.coffeeshop.model.Machine;
 import me.ap.coffeeshop.model.Refill;
 import me.ap.coffeeshop.util.DBService;
 import me.ap.coffeeshop.util.OrdersService;
+import me.ap.coffeeshop.util.UtilBean;
 
 @Named
 @ViewScoped
@@ -32,6 +33,11 @@ public class IndexView implements Serializable {
 	private DBService dBService;
 	@Inject
 	private OrdersService ordersService;
+	@Inject
+	private UtilBean util;
+
+	@Inject
+	private FacesContext facesContext;
 
 	@Inject
 	@Param(name = "tableNum")
@@ -53,6 +59,7 @@ public class IndexView implements Serializable {
 
 	@PostConstruct
 	private void init() {
+
 		machine1 = dBService.loadMachineByNum(1);
 		machine2 = dBService.loadMachineByNum(2);
 		machine3 = dBService.loadMachineByNum(3);
@@ -61,13 +68,29 @@ public class IndexView implements Serializable {
 		updateCurrentOrders();
 		logger.info("Index page loaded with table number: " + tableNum);
 		tableNumber = tableNum;
+
 	}
 
 	public void placeOrder(CoffeeType ct) {
+
+		if (tableNumber == null) {
+			facesContext.addMessage(null, util.errorMsg("You need to select a table number!"));
+			return;
+		}
+
 		CoffeeOrder order = new CoffeeOrder();
 		order.setCoffeeType(ct);
 		order.setTableNumber(tableNumber);
-		ordersService.determineMachine(order);
+		Long orderNumber = ordersService.determineMachine(order);
+
+		if (orderNumber == null) {
+			facesContext.addMessage(null, util.errorMsg("Something went wrong with your request, please try again!"));
+			return;
+		}
+
+		facesContext.addMessage(null, util.successMsg(
+				"Your order was successful, the number of your order is " + orderNumber + " Please remember it."));
+
 	}
 
 	public void changeTableNumber() throws IOException {
@@ -78,6 +101,7 @@ public class IndexView implements Serializable {
 	}
 
 	public boolean isMachineFree(long machineNum) {
+
 		Machine machine = dBService.loadMachineByNum(machineNum);
 
 		Refill latestRefill = dBService.getLatestRefillForMachine(machine);

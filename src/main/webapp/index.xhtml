@@ -28,7 +28,7 @@
 					</div>
 					<div class="grid-item-button">
 						<p:commandButton value="#{ct.price}e"
-							action="#{indexView.placeOrder(ct)}" />
+							action="#{indexView.placeOrder(ct)}" update="mainForm:messages" />
 					</div>
 				</div>
 			</p:dataGrid>
@@ -84,7 +84,8 @@
 				width="30%" widgetVar="tableNumberDialog" modal="true">
 				<p:panelGrid columns="2">
 					<h:outputLabel for="chTableNumId" value="Table number:" />
-					<p:inputNumber id="chTableNumId" value="#{indexView.chTableNumber}" minValue="1" />
+					<p:inputNumber id="chTableNumId" value="#{indexView.chTableNumber}"
+						minValue="1" />
 					<h:outputLabel for="tableNumChangePwId" value="Password:" />
 					<p:inputText id="tableNumChangePwId"
 						value="#{indexView.tableNumChangePw}" />
@@ -94,6 +95,8 @@
 					<br />
 				</p:panelGrid>
 			</p:dialog>
+
+			<p:growl id="messages" showDetail="true" />
 		</h:form>
 
 	</ui:define>
