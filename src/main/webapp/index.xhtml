@@ -44,7 +44,8 @@
 			</p:dataTable>
 
 			<p:dataGrid id="coffeeTypesGridId" var="ct"
-				value="#{adminView.coffeeTypes}" layout="grid">
+				value="#{adminView.coffeeTypes}" layout="grid"
+				style="padding-bottom: 15px">
 				<f:facet name="header">
            			 MENU
            		</f:facet>
@@ -62,52 +63,75 @@
 				</div>
 			</p:dataGrid>
 
-			<p:commandButton title="Refresh" icon="pi pi-refresh"
-				action="#{indexView.updateCurrentOrders()}" update="currentOrdersId" />
-			<h:panelGrid id="currentOrdersId" columns="3">
-				<h:outputText value="Machine no.#{indexView.machine1.id}" />
-				<h:outputText value="Machine no.#{indexView.machine2.id}" />
-				<h:outputText value="Machine no.#{indexView.machine3.id}" />
-				<h:outputText
-					value="#{indexView.isMachineFree(1) ? 'SLOBODAN' : 'ZAUZET'}"
-					style="#{indexView.isMachineFree(1) ? 'color:darkgreen' : 'color:red'}" />
-				<h:outputText
-					value="#{indexView.isMachineFree(2) ? 'SLOBODAN' : 'ZAUZET'}"
-					style="#{indexView.isMachineFree(2) ? 'color:darkgreen' : 'color:red'}" />
-				<h:outputText
-					value="#{indexView.isMachineFree(3) ? 'SLOBODAN' : 'ZAUZET'}"
-					style="#{indexView.isMachineFree(3) ? 'color:darkgreen' : 'color:red'}" />
-				<h:outputText value="#{indexView.mach1orders.size()}" />
-				<h:outputText value="#{indexView.mach2orders.size()}" />
-				<h:outputText value="#{indexView.mach3orders.size()}" />
-				<h:panelGroup>
-					<ul>
-						<c:forEach items="#{indexView.mach1orders}" var="order">
-							<li><h:outputText value="#{order.time}">
+			<p:accordionPanel widgetVar="basic" activeIndex="-1">
+				<p:tab title="Baristas overview">
+					<p:commandButton title="Refresh" icon="pi pi-refresh"
+						action="#{indexView.updateCurrentOrders()}"
+						update="baristaOverviewId" />
+					<p:panelGrid id="baristaOverviewId" columns="3">
+						<p:dataTable var="order" value="#{indexView.mach1orders}"
+							emptyMessage="No active orders.">
+							<f:facet name="header">
+								<h:outputText value="Machine number 1" />
+								<h:outputText
+									value="#{indexView.isMachineFree(1) ? '   FREE' : '   BUSY'}"
+									style="#{indexView.isMachineFree(1) ? 'color:lightgreen' : 'color:darkgoldenrod'}" />
+							</f:facet>
+							<p:column headerText="Order number">
+								<h:outputText value="#{order.id}" />
+							</p:column>
+							<p:column headerText="Table number">
+								<h:outputText value="#{order.tableNumber}" />
+							</p:column>
+							<p:column headerText="Finish time">
+								<h:outputText value="#{order.finishTime}">
 									<f:convertDateTime type="localDateTime" pattern="HH:mm:ss" />
-								</h:outputText></li>
-						</c:forEach>
-					</ul>
-				</h:panelGroup>
-				<h:panelGroup>
-					<ul>
-						<c:forEach items="#{indexView.mach2orders}" var="order">
-							<li><h:outputText value="#{order.time}">
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+						<p:dataTable var="order" value="#{indexView.mach2orders}"
+							emptyMessage="No active orders.">
+							<f:facet name="header">
+								<h:outputText value="Machine number 2" />
+								<h:outputText
+									value="#{indexView.isMachineFree(2) ? '   FREE' : '   BUSY'}"
+									style="#{indexView.isMachineFree(2) ? 'color:lightgreen' : 'color:darkgoldenrod'}" />
+							</f:facet>
+							<p:column headerText="Order number">
+								<h:outputText value="#{order.id}" />
+							</p:column>
+							<p:column headerText="Table number">
+								<h:outputText value="#{order.tableNumber}" />
+							</p:column>
+							<p:column headerText="Finish time">
+								<h:outputText value="#{order.finishTime}">
 									<f:convertDateTime type="localDateTime" pattern="HH:mm:ss" />
-								</h:outputText></li>
-						</c:forEach>
-					</ul>
-				</h:panelGroup>
-				<h:panelGroup>
-					<ul>
-						<c:forEach items="#{indexView.mach3orders}" var="order">
-							<li><h:outputText value="#{order.time}">
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+						<p:dataTable var="order" value="#{indexView.mach3orders}"
+							emptyMessage="No active orders.">
+							<f:facet name="header">
+								<h:outputText value="Machine number 3" />
+								<h:outputText
+									value="#{indexView.isMachineFree(3) ? '   FREE' : '   BUSY'}"
+									style="#{indexView.isMachineFree(3) ? 'color:lightgreen' : 'color:darkgoldenrod'}" />
+							</f:facet>
+							<p:column headerText="Order number">
+								<h:outputText value="#{order.id}" />
+							</p:column>
+							<p:column headerText="Table number">
+								<h:outputText value="#{order.tableNumber}" />
+							</p:column>
+							<p:column headerText="Finish time">
+								<h:outputText value="#{order.finishTime}">
 									<f:convertDateTime type="localDateTime" pattern="HH:mm:ss" />
-								</h:outputText></li>
-						</c:forEach>
-					</ul>
-				</h:panelGroup>
-			</h:panelGrid>
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+					</p:panelGrid>
+				</p:tab>
+			</p:accordionPanel>
 
 			<p:dialog id="tableNumberDialogId" header="Choose table number"
 				width="30%" widgetVar="tableNumberDialog" modal="true">
