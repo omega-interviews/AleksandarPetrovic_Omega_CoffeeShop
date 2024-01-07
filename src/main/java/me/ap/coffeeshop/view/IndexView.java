@@ -2,6 +2,7 @@ package me.ap.coffeeshop.view;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -50,6 +51,7 @@ public class IndexView implements Serializable {
 	private List<CoffeeOrder> mach1orders;
 	private List<CoffeeOrder> mach2orders;
 	private List<CoffeeOrder> mach3orders;
+	private List<CoffeeOrder> tableOrders = new ArrayList<>();
 
 	private Integer tableNumber;
 	private Integer chTableNumber;
@@ -68,6 +70,8 @@ public class IndexView implements Serializable {
 		updateCurrentOrders();
 		logger.info("Index page loaded with table number: " + tableNum);
 		tableNumber = tableNum;
+		if (tableNumber != null)
+			updateCurrentOrdersForTable();
 
 	}
 
@@ -119,6 +123,10 @@ public class IndexView implements Serializable {
 		mach1orders = dBService.getCurrentCoffeeOrdersForMachine(machine1);
 		mach2orders = dBService.getCurrentCoffeeOrdersForMachine(machine2);
 		mach3orders = dBService.getCurrentCoffeeOrdersForMachine(machine3);
+	}
+	
+	public void updateCurrentOrdersForTable() {
+		tableOrders = dBService.getCurrentCoffeeOrdersForTable(tableNumber);
 	}
 
 	public Machine getMachine1() {
@@ -199,6 +207,14 @@ public class IndexView implements Serializable {
 
 	public void setMach3orders(List<CoffeeOrder> mach3orders) {
 		this.mach3orders = mach3orders;
+	}
+
+	public List<CoffeeOrder> getTableOrders() {
+		return tableOrders;
+	}
+
+	public void setTableOrders(List<CoffeeOrder> tableOrders) {
+		this.tableOrders = tableOrders;
 	}
 
 }

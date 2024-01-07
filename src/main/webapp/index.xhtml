@@ -17,8 +17,32 @@
 					oncomplete="PF('tableNumberDialog').show();" />
 			</h1>
 
+			<p:dataTable id="currentOrdersForTableId" var="order"
+				value="#{indexView.tableOrders}">
+				<f:facet name="header">
+           			 Active orders for this table
+           			 <p:commandButton title="Refresh" icon="pi pi-refresh"
+						action="#{indexView.updateCurrentOrdersForTable()}"
+						update="currentOrdersForTableId" />
+				</f:facet>
+				<p:column headerText="Order number">
+					<h:outputText value="#{order.id}" />
+				</p:column>
+				<p:column headerText="Coffee">
+					<h:outputText value="#{order.coffeeType.name}" />
+				</p:column>
+				<p:column headerText="Time">
+					<h:outputText value="#{order.finishTime}">
+						<f:convertDateTime type="localDateTime" pattern="HH:mm:ss" />
+					</h:outputText>
+				</p:column>
+			</p:dataTable>
+
 			<p:dataGrid id="coffeeTypesGridId" var="ct"
 				value="#{adminView.coffeeTypes}" layout="grid">
+				<f:facet name="header">
+           			 MENU
+           		</f:facet>
 				<div class="grid-item" style="margin-bottom: 0">
 					<div class="grid-item-image">
 						<img style="max-height: 150px" src="#{ct.servletImagePath}" />

@@ -50,7 +50,7 @@ public class DBService {
 		} else
 			return null;
 	}
-
+	
 	public List<CoffeeType> getAllActiveCoffeeTypes() {
 		return em.createQuery("select c from CoffeeType c where c.deleted = false", CoffeeType.class).getResultList();
 	}
@@ -104,6 +104,19 @@ public class DBService {
 		List<CoffeeOrder> result = em
 				.createQuery("select o from CoffeeOrder o where o.machine = :mach and o.time > :t", CoffeeOrder.class)
 				.setParameter("mach", mach).setParameter("t", t).getResultList();
+		return result;
+	}
+	
+	public List<CoffeeOrder> getCurrentCoffeeOrdersForTable(int tableNumber) {
+		int longestPrepTime = em
+				.createQuery("select max(ct.preparationTime) from CoffeeType ct where ct.deleted = false",
+						Integer.class)
+				.getSingleResult();
+		LocalDateTime t = LocalDateTime.now();
+		t = t.minusSeconds(longestPrepTime);
+		List<CoffeeOrder> result = em
+				.createQuery("select o from CoffeeOrder o where o.tableNumber = :tableNumber and o.time > :t", CoffeeOrder.class)
+				.setParameter("tableNumber", tableNumber).setParameter("t", t).getResultList();
 		return result;
 	}
 

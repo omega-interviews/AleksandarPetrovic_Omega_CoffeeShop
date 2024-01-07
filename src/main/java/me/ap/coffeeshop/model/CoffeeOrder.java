@@ -9,20 +9,27 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class CoffeeOrder {
-	
+
 	@Id
 	@GeneratedValue
 	private long id;
-	
+
 	private LocalDateTime time;
-	
+
 	@ManyToOne
 	private CoffeeType coffeeType;
-	
+
 	@ManyToOne
 	private Machine machine;
-	
+
 	private int tableNumber;
+
+	public LocalDateTime getFinishTime() {
+		if (time != null && coffeeType != null) {
+			return time.plusSeconds(coffeeType.getPreparationTime());
+		} else
+			return time;
+	}
 
 	public long getId() {
 		return id;
@@ -69,5 +76,5 @@ public class CoffeeOrder {
 		return "CoffeeOrder [id=" + id + ", time=" + time + ", coffeeType=" + coffeeType + ", machine=" + machine
 				+ ", tableNumber=" + tableNumber + "]";
 	}
-	
+
 }
