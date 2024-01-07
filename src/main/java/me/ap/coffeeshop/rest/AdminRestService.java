@@ -161,10 +161,10 @@ public class AdminRestService {
 			return builder.build();
 		}
 
-		String filename = "";
-		String extension = "";
+		StringBuilder filename = new StringBuilder();
+		StringBuilder extension = new StringBuilder();
 		parseFileNameFromData(input, filename, extension);
-		if (filename.isEmpty() || extension.isEmpty()) {
+		if (filename.length() == 0 || extension.length() == 0) {
 			builder = Response.accepted("Sorry, we couldn't extract name and extension for the image.");
 			return builder.build();
 		}
@@ -172,7 +172,8 @@ public class AdminRestService {
 		byte[] bytes;
 		try {
 			bytes = input.getFormDataPart("imageFile", byte[].class, null);
-			String filePath = handleFileUpload(new ByteArrayInputStream(bytes), filename, extension);
+			String filePath = handleFileUpload(new ByteArrayInputStream(bytes), filename.toString(),
+					extension.toString());
 			if (!filePath.isEmpty()) {
 				ct.setImagePath(filePath);
 				dBService.saveCoffeeType(ct);
@@ -226,15 +227,21 @@ public class AdminRestService {
 		}
 	}
 
-	public void parseFileNameFromData(MultipartFormDataInput input, String filename, String extension) {
+	private void parseFileNameFromData(MultipartFormDataInput input, StringBuilder filename, StringBuilder extension) {
 		logger.info("Extracting file name from req header..");
 		Map<String, List<InputPart>> formParts = input.getFormDataMap();
 		String contentdisp = formParts.get("imageFile").get(0).getHeaders().get("Content-Disposition").get(0);
+		logger.info("Content-disposition string=" + contentdisp);
 		int dotIndex = contentdisp.indexOf("filename=");
-		filename = contentdisp.substring(dotIndex + 10, contentdisp.length() - 1);
+		logger.info("Index of filename= " + dotIndex);
+		filename.append(contentdisp.substring(dotIndex + 10, contentdisp.length() - 1));
+		logger.info("File name with ext: " + filename);
 		dotIndex = filename.indexOf(".");
-		extension = filename.substring(dotIndex, filename.length());
-		filename = filename.substring(0, dotIndex);
+		logger.info("Index of dot: " + dotIndex);
+		extension.append(filename.substring(dotIndex, filename.length()));
+		logger.info("Extension: " + extension);
+		filename.substring(0, dotIndex);
+		logger.info("File name: " + filename);
 	}
 
 }
