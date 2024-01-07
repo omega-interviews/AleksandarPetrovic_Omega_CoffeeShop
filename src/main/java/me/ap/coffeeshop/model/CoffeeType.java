@@ -1,12 +1,17 @@
 package me.ap.coffeeshop.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 public class CoffeeType {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "coffee_type_seq_gen")
+	@SequenceGenerator(name = "coffee_type_seq_gen", sequenceName = "coffee_type_id_seq", allocationSize = 1)
 	private long id;
 
 	private String name;
@@ -20,6 +25,8 @@ public class CoffeeType {
 	private String imagePath;
 
 	public String getServletImagePath() {
+		if (imagePath == null)
+			return "";
 		int start = imagePath.lastIndexOf("/");
 		if (start < 0)
 			return "";
